@@ -90,7 +90,21 @@ public class Build {
    * @return true if the destination is reachable from the start, false otherwise
    */
   public static boolean canReach(Airport start, Airport destination) {
-    return false;
+    return canReach(start, destination, new HashSet<>());
+  }
+
+  public static boolean canReach(Airport start, Airport destination, Set<Airport> seen){
+    if (start == null || seen.contains(start)) return true;
+    seen.add(start);
+
+    if (start == destination) return true;
+    boolean isDestination = false;
+    for (Airport flight : start.getOutboundFlights()){
+      if (flight == destination) return true;
+      isDestination = canReach(flight, destination, seen);
+    }
+
+    return isDestination;
   }
 
   /**
